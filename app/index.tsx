@@ -7,6 +7,10 @@ export default function Index() {
 
   console.log("Index component rendered");
   
+function arttir(newValue: number) {
+    // count += 1;
+    setCount(count + newValue)
+  }
 
   return (
     <View
@@ -16,7 +20,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Counter count={count} setCount={setCount} fullName="Emin Başbayan" />
+      <Counter count={count} arttir={arttir} />
       <Text>Edit app/index.tsx to edit this screen.</Text>
     </View>
   );
