@@ -4,7 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '@/components/Button';
 import ProductCard from '@/components/ProductCard';
-import Counter from "@/components/Counter"
+import Counter from '@/components/Counter';
+import CounterModal from '@/components/CounterModal';
 
 interface Product {
   id: number;
@@ -18,6 +19,7 @@ interface Product {
 export default function Index(): React.JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const fetchProducts = async (): Promise<void> => {
     setIsLoading(true);
@@ -56,7 +58,11 @@ export default function Index(): React.JSX.Element {
           alignItems: 'center',
         }}
       >
-        <Counter />
+        <Button title="Modalı Aç" onPress={() => setModalVisible(true)} />
+        {modalVisible && (
+          <CounterModal onClose={() => setModalVisible(false)} visible={modalVisible} />
+        )}
+
         <Text
           style={{
             fontSize: 24,
