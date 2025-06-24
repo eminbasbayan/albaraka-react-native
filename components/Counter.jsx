@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Button, Text, View } from 'react-native';
 
-function Counter() {
-  const [count, setCount] = useState(20);
+function Counter({ count, setCount, fullName }) {
 
   // let counter = 0;
+
+  console.log('Counter component rendered');
 
   function arttir() {
     // count += 1;
