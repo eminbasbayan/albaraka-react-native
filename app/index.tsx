@@ -1,29 +1,29 @@
-import { useState } from "react";
-import Counter from "@/components/Counter";
-import ProductCard from "@/components/ProductCard"
-import { Text, View } from "react-native";
+import ProductCard from '@/components/ProductCard';
+import MyFunc, { productsData, newArray } from '@/constants/data';
+import { FlatList, View } from 'react-native';
+
+
 
 export default function Index() {
-  const [count, setCount] = useState(20);
-
-  console.log("Index component rendered");
-  
-function arttir(newValue: number) {
-    // count += 1;
-    setCount(count + newValue)
-  }
+  console.log(productsData);
 
   return (
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
-      <ProductCard />
-      <Counter count={count} arttir={arttir} />
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <FlatList
+       data={productsData}
+       keyExtractor={(item, index)=> index.toString()}
+       showsVerticalScrollIndicator={false}
+       renderItem={({item})=> {
+        return <ProductCard key={item.id} {...item} />
+       }}
+      />
+      
     </View>
   );
 }
