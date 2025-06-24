@@ -1,4 +1,4 @@
-import { Image, Text, View } from 'react-native';
+import { Image, Text, View, Button } from 'react-native';
 
 function ProductCard({id, title, image, description, price, category }) {
   return (
@@ -17,9 +17,9 @@ function ProductCard({id, title, image, description, price, category }) {
           uri: image,
         }}
         style={{
-          width: 200,
+          width: "100%",
           height: 200,
-          resizeMode: "cover"
+          resizeMode: "cover",
         }}
 
       />
@@ -56,6 +56,8 @@ function ProductCard({id, title, image, description, price, category }) {
       >
         {category}
       </Text>
+
+      <Button title="Sepete Ekle" />
     </View>
   );
 }
