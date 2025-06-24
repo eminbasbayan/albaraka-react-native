@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, FlatList, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '@/components/Button';
 import ProductCard from '@/components/ProductCard';
+import Counter from "@/components/Counter"
 
 interface Product {
   id: number;
@@ -40,6 +41,12 @@ export default function Index(): React.JSX.Element {
     }
   };
 
+  useEffect(() => {
+    console.log('component ilk yüklendiğinde çalışır!');
+
+    fetchProducts();
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View
@@ -49,6 +56,7 @@ export default function Index(): React.JSX.Element {
           alignItems: 'center',
         }}
       >
+        <Counter />
         <Text
           style={{
             fontSize: 24,
