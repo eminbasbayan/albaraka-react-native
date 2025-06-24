@@ -5,11 +5,20 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '@/components/Button';
 import ProductCard from '@/components/ProductCard';
 
-export default function Index() {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image: string;
+}
 
-  const fetchProducts = async () => {
+export default function Index(): React.JSX.Element {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const fetchProducts = async (): Promise<void> => {
     setIsLoading(true);
     try {
       const res = await fetch('https://fakestoreapi.com/products/');
