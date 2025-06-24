@@ -1,6 +1,21 @@
-import { Image, Text, View, Button } from 'react-native';
+import { Image, Text, View } from 'react-native';
+import Button from './Button';
 
-function ProductCard({id, title, image, description, price, category }) {
+interface ProductCardProps {
+  title?: string;
+  price?: number;
+  description?: string;
+  category?: string;
+  image?: string;
+}
+
+function ProductCard({
+  title,
+  image,
+  description,
+  price,
+  category,
+}: ProductCardProps) {
   return (
     <View
       style={{
@@ -17,11 +32,10 @@ function ProductCard({id, title, image, description, price, category }) {
           uri: image,
         }}
         style={{
-          width: "100%",
+          width: '100%',
           height: 200,
-          resizeMode: "cover",
+          resizeMode: 'cover',
         }}
-
       />
       <Text
         style={{
@@ -52,12 +66,13 @@ function ProductCard({id, title, image, description, price, category }) {
         style={{
           color: '#999',
           fontStyle: 'italic',
+          marginBottom: 6
         }}
       >
         {category}
       </Text>
 
-      <Button title="Sepete Ekle" />
+      <Button title="Sepete Ekle" onPress={()=> {}} variant='outline' />
     </View>
   );
 }
