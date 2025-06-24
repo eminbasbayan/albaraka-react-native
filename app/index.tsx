@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Counter from "@/components/Counter";
+import ProductCard from "@/components/ProductCard"
 import { Text, View } from "react-native";
 
 export default function Index() {
@@ -20,6 +21,7 @@ function arttir(newValue: number) {
         alignItems: "center",
       }}
     >
+      <ProductCard />
       <Counter count={count} arttir={arttir} />
       <Text>Edit app/index.tsx to edit this screen.</Text>
     </View>
