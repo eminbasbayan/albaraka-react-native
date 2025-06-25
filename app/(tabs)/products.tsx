@@ -4,12 +4,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ProductCard from '@/components/ProductCard';
 import { productsData } from '@/constants/data';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { CounterContext } from '@/context/CounterContext';
+import { fetchProducts } from '@/redux/productSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function ProductsScreen() {
   const [cartItems, setCartItems] = useState([])
   const {count} = useContext(CounterContext)
+  const {products, loading, error} =useSelector((state)=> state.product)
+  const dispatch = useDispatch()
   // Bu değişkenler, state yönetimi olmadan, sadece UI gösterimi için
   const searchQuery = '';
   const selectedCategory = 'Tümü';
@@ -23,7 +27,13 @@ export default function ProductsScreen() {
     setCartItems([...cartItems, product])
   }
 
-  console.log(cartItems);
+ console.log(loading);
+ console.log(error);
+ 
+
+  useEffect(()=>{
+   dispatch(fetchProducts())
+  }, [dispatch])
   
 
   return (
@@ -59,7 +69,7 @@ export default function ProductsScreen() {
       
       {/* Ürün Listesi */}
       <FlatList
-        data={productsData.filter(item => item.id)}
+        data={products.filter(item => item.id)}
         keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
         renderItem={({ item }) => (
           <View style={styles.productItem}>
