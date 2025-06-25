@@ -1,8 +1,20 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 export default function TabLayout() {
+  const [newCartItems, setNewCartItems] = useState([]);
+  const { cartItems } = useSelector((state) => state.cart);
+
+ const getCartItemsCount = cartItems?.reduce((total, item) => total + item.quantity, 0)
+
+  useEffect(() => {
+   
+      
+  }, []);
+
   return (
     <Tabs
       screenOptions={{
@@ -39,9 +51,9 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => {
             return <Ionicons name="cart-outline" size={size} color={color} />;
           },
+          tabBarBadge: getCartItemsCount,
         }}
       />
-      
     </Tabs>
   );
 }

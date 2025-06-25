@@ -14,10 +14,11 @@ import { useContext } from 'react';
 import { CartContext } from '@/context/CartContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { arttir, azalt } from '@/redux/counterSlice';
+import { clearCart, deleteFromCart } from '@/redux/cartSlice';
 
 export default function CartScreen() {
-  const { cartItems, deleteFromCart, handleClearCart } =
-    useContext(CartContext);
+  const { handleClearCart } = useContext(CartContext);
+  const { cartItems } = useSelector((state) => state.cart);
   const { count, total: myTotalInfo } = useSelector((state) => state.counter);
   const dispatch = useDispatch();
 
@@ -71,6 +72,7 @@ export default function CartScreen() {
                 key={item.id}
                 item={item}
                 deleteFromCart={deleteFromCart}
+                dispatch={dispatch}
               />
             ))}
           </ScrollView>
@@ -92,7 +94,7 @@ export default function CartScreen() {
 
             <Button
               title="Siparişi Tamamla"
-              onPress={handleClearCart}
+              onPress={()=> dispatch(clearCart())}
               variant="primary"
               fullWidth
             />
@@ -104,7 +106,7 @@ export default function CartScreen() {
 }
 
 // Sepet öğesi bileşeni
-function CartItem({ item, deleteFromCart }) {
+function CartItem({ item, deleteFromCart, dispatch }) {
   return (
     <View style={styles.cartItem}>
       <Image source={{ uri: item.image }} style={styles.cartItemImage} />
@@ -126,7 +128,7 @@ function CartItem({ item, deleteFromCart }) {
       </View>
       <TouchableOpacity
         style={styles.removeButton}
-        onPress={() => deleteFromCart(item.id)}
+        onPress={() => dispatch(deleteFromCart(item.id))}
       >
         <Ionicons name="trash-outline" size={20} color="#ff4d4d" />
       </TouchableOpacity>
