@@ -2,20 +2,32 @@ import { Image, Text, View } from 'react-native';
 import Button from './Button';
 
 interface ProductCardProps {
+  id: number;
   title?: string;
   price?: number;
   description?: string;
   category?: string;
   image?: string;
+  addToCart?: () => void;
 }
 
 function ProductCard({
+  id,
   title,
   image,
   description,
   price,
   category,
+  addToCart,
 }: ProductCardProps) {
+  const product = {
+    id,
+    title,
+    image,
+    description,
+    price,
+    category,
+  };
   return (
     <View
       style={{
@@ -66,13 +78,13 @@ function ProductCard({
         style={{
           color: '#999',
           fontStyle: 'italic',
-          marginBottom: 6
+          marginBottom: 6,
         }}
       >
         {category}
       </Text>
 
-      <Button title="Sepete Ekle" onPress={()=> {}} variant='outline' />
+      <Button title="Sepete Ekle" onPress={()=> addToCart(product)} variant="outline" />
     </View>
   );
 }
