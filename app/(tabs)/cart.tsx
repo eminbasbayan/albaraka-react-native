@@ -12,9 +12,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '@/components/Button';
 import { useContext } from 'react';
 import { CartContext } from '@/context/CartContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { arttir, azalt } from '@/redux/counterSlice';
 
 export default function CartScreen() {
-  const { cartItems, deleteFromCart, handleClearCart } = useContext(CartContext);
+  const { cartItems, deleteFromCart, handleClearCart } =
+    useContext(CartContext);
+  const { count, total: myTotalInfo } = useSelector((state) => state.counter);
+  const dispatch = useDispatch();
+
+  console.log('redux-toolkit', count);
+  console.log('redux-toolkit', myTotalInfo);
 
   // Sepette gösterilecek örnek ürünler (ilk 2 ürün)
 
@@ -41,12 +49,29 @@ export default function CartScreen() {
             variant="primary"
             style={styles.shopButton}
           />
+          <Button
+            title="Arttır"
+            onPress={() => dispatch(arttir())}
+            variant="primary"
+            style={styles.shopButton}
+          />
+          <Button
+            title="Azalt"
+            onPress={() => dispatch(azalt())}
+            variant="primary"
+            style={styles.shopButton}
+          />
+          <Text>{count}</Text>
         </View>
       ) : (
         <>
           <ScrollView style={styles.cartItemsContainer}>
             {cartItems.map((item) => (
-              <CartItem key={item.id} item={item} deleteFromCart={deleteFromCart} />
+              <CartItem
+                key={item.id}
+                item={item}
+                deleteFromCart={deleteFromCart}
+              />
             ))}
           </ScrollView>
 
