@@ -1,10 +1,13 @@
 import { Stack } from 'expo-router';
 import CounterProvider from '@/context/CounterContext';
+import CartProvider from '@/context/CartContext';
 
 export default function RootLayout() {
   return (
     <CounterProvider>
-      <Stack />
+      <CartProvider>
+        <Stack />
+      </CartProvider>
     </CounterProvider>
   );
 }

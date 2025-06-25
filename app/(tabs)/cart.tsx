@@ -1,23 +1,23 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '@/components/Button';
-import { productsData } from '@/constants/data';
 import { useContext } from 'react';
-import { CounterContext } from '@/context/CounterContext';
+import { CartContext } from '@/context/CartContext';
 
 export default function CartScreen() {
-  const {count, handleCount} = useContext(CounterContext);
+  const { cartItems, deleteFromCart, handleClearCart } = useContext(CartContext);
 
-
-  
   // Sepette gösterilecek örnek ürünler (ilk 2 ürün)
-  const cartItems = productsData.slice(0, 2).map(item => ({ 
-    ...item, 
-    quantity: 1 
-  }));
-  
+
   // Toplam fiyat hesaplama - statik
   const subtotal = cartItems.reduce((acc, item) => acc + (item.price || 0), 0);
   const shipping = 15;
@@ -28,8 +28,6 @@ export default function CartScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <Text style={styles.pageTitle}>{count}</Text>
-
       {isCartEmpty ? (
         <View style={styles.emptyCartContainer}>
           <Ionicons name="cart-outline" size={80} color="#ccc" />
@@ -37,21 +35,21 @@ export default function CartScreen() {
           <Text style={styles.emptyCartSubtext}>
             Sepetinizde henüz ürün bulunmuyor.
           </Text>
-          <Button 
-            title="Alışverişe Başla" 
-            onPress={() => {}} 
+          <Button
+            title="Alışverişe Başla"
+            onPress={() => {}}
             variant="primary"
-            style={styles.shopButton} 
+            style={styles.shopButton}
           />
         </View>
       ) : (
         <>
           <ScrollView style={styles.cartItemsContainer}>
-            {cartItems.map(item => (
-              <CartItem key={item.id} item={item} />
+            {cartItems.map((item) => (
+              <CartItem key={item.id} item={item} deleteFromCart={deleteFromCart} />
             ))}
           </ScrollView>
-          
+
           <View style={styles.summaryContainer}>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>Ara Toplam</Text>
@@ -66,12 +64,12 @@ export default function CartScreen() {
               <Text style={styles.totalLabel}>Toplam</Text>
               <Text style={styles.totalValue}>{total.toFixed(2)}₺</Text>
             </View>
-            
-            <Button 
-              title="Siparişi Tamamla" 
-              onPress={handleCount} 
+
+            <Button
+              title="Siparişi Tamamla"
+              onPress={handleClearCart}
               variant="primary"
-              fullWidth 
+              fullWidth
             />
           </View>
         </>
@@ -81,7 +79,7 @@ export default function CartScreen() {
 }
 
 // Sepet öğesi bileşeni
-function CartItem({ item }) {
+function CartItem({ item, deleteFromCart }) {
   return (
     <View style={styles.cartItem}>
       <Image source={{ uri: item.image }} style={styles.cartItemImage} />
@@ -90,7 +88,7 @@ function CartItem({ item }) {
           {item.title}
         </Text>
         <Text style={styles.cartItemPrice}>{item.price}₺</Text>
-        
+
         <View style={styles.quantityContainer}>
           <TouchableOpacity style={styles.quantityButton}>
             <Text style={styles.quantityButtonText}>-</Text>
@@ -101,7 +99,10 @@ function CartItem({ item }) {
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity style={styles.removeButton}>
+      <TouchableOpacity
+        style={styles.removeButton}
+        onPress={() => deleteFromCart(item.id)}
+      >
         <Ionicons name="trash-outline" size={20} color="#ff4d4d" />
       </TouchableOpacity>
     </View>

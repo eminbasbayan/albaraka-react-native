@@ -1,5 +1,7 @@
 import { Image, Text, View } from 'react-native';
 import Button from './Button';
+import { useContext } from 'react';
+import { CartContext } from '@/context/CartContext';
 
 interface ProductCardProps {
   id: number;
@@ -18,8 +20,9 @@ function ProductCard({
   description,
   price,
   category,
-  addToCart,
 }: ProductCardProps) {
+  const { addToCart } = useContext(CartContext);
+  
   const product = {
     id,
     title,
@@ -28,6 +31,7 @@ function ProductCard({
     price,
     category,
   };
+
   return (
     <View
       style={{
@@ -84,7 +88,11 @@ function ProductCard({
         {category}
       </Text>
 
-      <Button title="Sepete Ekle" onPress={()=> addToCart(product)} variant="outline" />
+      <Button
+        title="Sepete Ekle"
+        onPress={() => addToCart(product)}
+        variant="outline"
+      />
     </View>
   );
 }
