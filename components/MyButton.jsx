@@ -6,4 +6,4 @@ const MyButton = ({ onPress }) => {
   return <Button onPress={onPress} title="MyButton" />;
 };
 
-export default MyButton;
+export default React.memo(MyButton);

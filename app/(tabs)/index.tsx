@@ -8,7 +8,7 @@ import Counter from '@/components/Counter';
 import MyElement from '@/components/MyElement';
 import ProductCard from '@/components/ProductCard';
 import { productsData } from '@/constants/data';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export default function HomeScreen() {
   const [toggleParagraph, setToggleParagraph] = useState(false);
@@ -23,9 +23,9 @@ export default function HomeScreen() {
     { name: 'Mutfak', icon: 'restaurant-outline' },
   ];
 
-  function handleToggleParagraph() {
-    setToggleParagraph(!toggleParagraph);
-  }
+  const handleToggleParagraph = useCallback(() => {
+    setToggleParagraph((prevState)=> !prevState);
+  }, [setToggleParagraph])
 
   console.log('HomeScreen re-rendered!');
 
