@@ -2,7 +2,7 @@ import { Image, Text, View } from 'react-native';
 import Button from './Button';
 import { useContext } from 'react';
 import { CartContext } from '@/context/CartContext';
-import { addToCart } from '@/redux/cartSlice';
+// import { addToCart } from '@/redux/cartSlice';
 import { useDispatch } from 'react-redux';
 
 interface ProductCardProps {
@@ -23,7 +23,8 @@ function ProductCard({
   price,
   category,
 }: ProductCardProps) {
-  // const { addToCart } = useContext(CartContext);
+
+  const { addToCart } = useContext(CartContext);
   const dispatch = useDispatch();
   
   const product = {
@@ -93,7 +94,7 @@ function ProductCard({
 
       <Button
         title="Sepete Ekle"
-        onPress={() => dispatch(addToCart(product))}
+        onPress={() => addToCart(product)}
         variant="outline"
       />
     </View>
