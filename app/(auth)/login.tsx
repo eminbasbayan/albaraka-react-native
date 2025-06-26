@@ -2,46 +2,75 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { useState } from 'react';
 import {
-    Image,
-    KeyboardAvoidingView,
-    Platform,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { useForm, Controller } from 'react-hook-form';
+import * as yup from 'yup';
 import Button from '@/components/Button';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const loginSchema = yup.object({
+  email: yup
+    .string()
+    .required('E-posta adresi zorunludur!')
+    .email('Geçerli bir e-posta adresi girin!'),
+  password: yup
+    .string()
+    .required('Şifre gerekli!')
+    .min(6, 'Şifre en az 6 karakter olmalıdır!'),
+});
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
+  console.log('re-render!');
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
         <View style={styles.content}>
           {/* Logo */}
           <View style={styles.logoContainer}>
-            <Image 
-              source={{ uri: 'https://fakestoreapi.com/icons/logo.png' }} 
-              style={styles.logo} 
+            <Image
+              source={{ uri: 'https://fakestoreapi.com/icons/logo.png' }}
+              style={styles.logo}
               resizeMode="contain"
             />
           </View>
-          
+
           {/* Başlık */}
           <View style={styles.headerContainer}>
             <Text style={styles.title}>Hoş Geldiniz</Text>
             <Text style={styles.subtitle}>Hesabınıza giriş yapın</Text>
           </View>
-          
+
           {/* Form */}
           <View style={styles.form}>
             {/* E-posta */}
@@ -49,55 +78,91 @@ export default function LoginScreen() {
               <View style={styles.iconContainer}>
                 <Ionicons name="mail-outline" size={20} color="#666" />
               </View>
-              <TextInput
-                style={styles.input}
-                placeholder="E-posta"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={styles.input}
+                    placeholder="E-posta"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                  />
+                )}
               />
             </View>
-            
+            {errors.email && (
+              <Text
+                style={{
+                  color: 'red',
+                  fontWeight: 'bold',
+                }}
+              >
+                {errors.email?.message}
+              </Text>
+            )}
+
             {/* Parola */}
             <View style={styles.inputContainer}>
               <View style={styles.iconContainer}>
                 <Ionicons name="lock-closed-outline" size={20} color="#666" />
               </View>
-              <TextInput
-                style={styles.input}
-                placeholder="Parola"
-                secureTextEntry={secureTextEntry}
-                value={password}
-                onChangeText={setPassword}
+              <Controller
+                name="password"
+                control={control}
+                render={({ field: { value, onBlur, onChange } }) => (
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Parola"
+                    secureTextEntry={secureTextEntry}
+                    value={value}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                  />
+                )}
               />
-              <TouchableOpacity 
-                style={styles.eyeIcon} 
+
+              <TouchableOpacity
+                style={styles.eyeIcon}
                 onPress={() => setSecureTextEntry(!secureTextEntry)}
               >
-                <Ionicons 
-                  name={secureTextEntry ? "eye-outline" : "eye-off-outline"} 
-                  size={20} 
-                  color="#666" 
+                <Ionicons
+                  name={secureTextEntry ? 'eye-outline' : 'eye-off-outline'}
+                  size={20}
+                  color="#666"
                 />
               </TouchableOpacity>
             </View>
-            
+
+            {errors.password && (
+              <Text
+                style={{
+                  color: 'red',
+                  fontWeight: 'bold',
+                }}
+              >
+                {errors.password?.message}
+              </Text>
+            )}
+
             {/* Parolamı Unuttum */}
             <TouchableOpacity style={styles.forgotPassword}>
               <Text style={styles.forgotPasswordText}>Parolamı Unuttum</Text>
             </TouchableOpacity>
-            
+
             {/* Giriş Butonu */}
-            <Button 
-              title="Giriş Yap" 
-              onPress={() => {}} 
-              variant="primary" 
+            <Button
+              title="Giriş Yap"
+              onPress={handleSubmit(onSubmit)}
+              variant="primary"
               fullWidth
             />
           </View>
         </View>
-        
+
         {/* Kayıt Ol */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>Hesabınız yok mu?</Text>
