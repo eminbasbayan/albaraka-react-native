@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
-import { useState } from 'react';
+import { Link, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -16,6 +17,8 @@ import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import Button from '@/components/Button';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { login } from '@/redux/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const loginSchema = yup.object({
   email: yup
@@ -30,6 +33,9 @@ const loginSchema = yup.object({
 
 export default function LoginScreen() {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const { user, token, error, status } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const router = useRouter();
 
   const {
     control,
@@ -44,10 +50,17 @@ export default function LoginScreen() {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
+    dispatch(login(data));
   };
 
-  console.log('re-render!');
+  useEffect(() => {
+    if (status === 'succeeded') {
+      router.replace('/(tabs)');
+      
+    }else if(status === "failed"){
+      Alert.alert("Giriş Hatası", error)
+    }
+  }, [status, router]);
 
   return (
     <SafeAreaView style={styles.container}>

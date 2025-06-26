@@ -1,14 +1,23 @@
+import { setAuth } from '@/redux/authSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Redirect, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { Text, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 export default function RootLayout() {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setTimeout(() => {
+    setTimeout(async () => {
       try {
-        const isAuthenticated = false; // Replace with actual authentication logic
+        // Replace with actual authentication logic
+
+        const isAuthenticated = await AsyncStorage.getItem('token');
+        const user = await AsyncStorage.getItem('user');
+        dispatch(setAuth(JSON.parse(user)))
+        console.log('user:', user);
 
         if (isAuthenticated) {
           // If authenticated, redirect to the home screen
@@ -22,7 +31,7 @@ export default function RootLayout() {
       }
     }, 1000); // Simulate a delay for the redirect
     // Check if the user is authenticated
-  }, []);
+  }, [router]);
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

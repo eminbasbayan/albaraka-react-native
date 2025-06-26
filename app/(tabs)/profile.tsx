@@ -1,10 +1,23 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '@/components/Button';
+import { logout } from '@/redux/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'expo-router';
 
 export default function ProfileScreen() {
+  const dispatch = useDispatch();
+  const { user: thisUser } = useSelector((state) => state.auth);
+  const router = useRouter();
   // Örnek kullanıcı bilgileri (statik veriler)
   const user = {
     name: 'Ahmet Yılmaz',
@@ -15,57 +28,67 @@ export default function ProfileScreen() {
 
   // Profil menü öğeleri
   const menuItems = [
-    { 
-      id: 'orders', 
-      title: 'Siparişlerim', 
+    {
+      id: 'orders',
+      title: 'Siparişlerim',
       icon: 'receipt-outline',
       badge: '3',
     },
-    { 
-      id: 'favorites', 
-      title: 'Favorilerim', 
+    {
+      id: 'favorites',
+      title: 'Favorilerim',
       icon: 'heart-outline',
-      badge: '5', 
+      badge: '5',
     },
-    { 
-      id: 'addresses', 
-      title: 'Adres Bilgilerim', 
-      icon: 'location-outline' 
+    {
+      id: 'addresses',
+      title: 'Adres Bilgilerim',
+      icon: 'location-outline',
     },
-    { 
-      id: 'payments', 
-      title: 'Ödeme Yöntemlerim', 
-      icon: 'card-outline' 
+    {
+      id: 'payments',
+      title: 'Ödeme Yöntemlerim',
+      icon: 'card-outline',
     },
-    { 
-      id: 'notifications', 
-      title: 'Bildirim Ayarları', 
-      icon: 'notifications-outline' 
+    {
+      id: 'notifications',
+      title: 'Bildirim Ayarları',
+      icon: 'notifications-outline',
     },
-    { 
-      id: 'settings', 
-      title: 'Uygulama Ayarları', 
-      icon: 'settings-outline' 
+    {
+      id: 'settings',
+      title: 'Uygulama Ayarları',
+      icon: 'settings-outline',
     },
   ];
+
+  function handleLogout() {
+    dispatch(logout());
+    router.replace('/(auth)/login');
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
         <Text style={styles.pageTitle}>Profilim</Text>
       </View>
-      
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollView}
+      >
         {/* Profil Kartı */}
         <View style={styles.profileCard}>
           <Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{user.name}</Text>
+            <Text style={styles.userName}>
+              {thisUser ? thisUser.fullName : user.name}
+            </Text>
             <Text style={styles.userEmail}>{user.email}</Text>
             <Text style={styles.memberSince}>Üyelik: {user.memberSince}</Text>
           </View>
         </View>
-        
+
         {/* Özet Bilgiler */}
         <View style={styles.statsContainer}>
           <View style={styles.statItem}>
@@ -83,7 +106,7 @@ export default function ProfileScreen() {
             <Text style={styles.statLabel}>Kazanç</Text>
           </View>
         </View>
-        
+
         {/* Profil Menüsü */}
         <View style={styles.menuContainer}>
           <Text style={styles.menuTitle}>Hesap</Text>
@@ -104,7 +127,7 @@ export default function ProfileScreen() {
             </TouchableOpacity>
           ))}
         </View>
-        
+
         {/* Destek & Hakkında */}
         <View style={styles.menuContainer}>
           <Text style={styles.menuTitle}>Diğer</Text>
@@ -119,7 +142,11 @@ export default function ProfileScreen() {
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem}>
             <View style={styles.menuIconContainer}>
-              <Ionicons name="information-circle-outline" size={22} color="#2f95dc" />
+              <Ionicons
+                name="information-circle-outline"
+                size={22}
+                color="#2f95dc"
+              />
             </View>
             <Text style={styles.menuText}>Hakkımızda</Text>
             <View style={styles.menuRight}>
@@ -127,16 +154,12 @@ export default function ProfileScreen() {
             </View>
           </TouchableOpacity>
         </View>
-        
+
         {/* Çıkış Yap Butonu */}
         <View style={styles.logoutContainer}>
-          <Button 
-            title="Çıkış Yap" 
-            onPress={() => {}} 
-            variant="outline"
-          />
+          <Button title="Çıkış Yap" onPress={handleLogout} variant="outline" />
         </View>
-        
+
         {/* Uygulama Versiyonu */}
         <Text style={styles.versionText}>Versiyon 1.0.0</Text>
       </ScrollView>
