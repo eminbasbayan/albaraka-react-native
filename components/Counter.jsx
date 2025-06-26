@@ -1,20 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button, Text, View } from 'react-native';
 
 function Counter() {
-  const [count, setCount] = useState(0);
-  const [fullName, setFullName] = useState('Ahmet Demir');
+  const countRef = useRef(0);
+  const [, forceUpdate] = useState(0);
+  // const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    console.log("component ilk yüklendiğinde ve deps. array'e göre çalışır!");
-  }, [count]);
+  function arttir() {
+    countRef.current++;
+    console.log(countRef.current);
+    forceUpdate((n) => n + 1);
+  }
+
+  console.log('component re-rendered!');
 
   return (
     <View>
-      <Text>Counter: {count}</Text>
-      <Button title="+" onPress={() => setCount(count + 1)} />
-      <Text>Name: {fullName}</Text>
-      <Button title="+" onPress={() => setFullName('Emin Başbayan')} />
+      <Button title="+" onPress={arttir} />
+      <Text>{countRef.current}</Text>
+      <Button title="-" onPress={() => {}} />
       {/* <Button title='Reset' />
       <Button title='-' /> */}
     </View>

@@ -3,6 +3,7 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Button from '@/components/Button';
+import Counter from '@/components/Counter';
 import ProductCard from '@/components/ProductCard';
 import { productsData } from '@/constants/data';
 
@@ -21,6 +22,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView showsVerticalScrollIndicator={false}>
+        <Counter />
         {/* Banner Bölümü */}
         <View style={styles.banner}>
           <Image 
