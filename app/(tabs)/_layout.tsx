@@ -8,12 +8,12 @@ export default function TabLayout() {
   const [newCartItems, setNewCartItems] = useState([]);
   const { cartItems } = useSelector((state) => state.cart);
 
- const getCartItemsCount = cartItems?.reduce((total, item) => total + item.quantity, 0)
+  const getCartItemsCount = cartItems?.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
-  useEffect(() => {
-   
-      
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Tabs
@@ -52,6 +52,15 @@ export default function TabLayout() {
             return <Ionicons name="cart-outline" size={size} color={color} />;
           },
           tabBarBadge: getCartItemsCount,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profil',
+          tabBarIcon: ({ color, size }) => {
+            return <Ionicons name="person-outline" size={size} color={color} />;
+          },
         }}
       />
     </Tabs>
