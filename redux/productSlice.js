@@ -1,9 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
+  // API çağrısı 
   const res = await fetch('https://fakestoreapi.com/products/');
-  const data = await res.json()
-  return data;
+  const data = await res.json();
+  
+  // Kasıtlı olarak gecikme oluştur
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(data);
+    }, 2000); // 2 saniye gecikme
+  });
 });
 
 const productSlice = createSlice({

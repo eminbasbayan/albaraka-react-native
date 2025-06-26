@@ -48,3 +48,5 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+React Native Folder Structure: https://react-egitim-planlamasi.notion.site/4-Modern-React-Native-Best-Practice-Folder-Structure-21dcfb1493f6801d99a2f57116db54f4

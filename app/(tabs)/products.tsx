@@ -3,16 +3,17 @@ import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'r
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ProductCard from '@/components/ProductCard';
+import ProductSkeleton from '@/components/ProductSkeleton';
 import { productsData } from '@/constants/data';
-import { useContext, useEffect, useState } from 'react';
 import { CounterContext } from '@/context/CounterContext';
 import { fetchProducts } from '@/redux/productSlice';
+import { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function ProductsScreen() {
   const [cartItems, setCartItems] = useState([])
   const {count} = useContext(CounterContext)
-  const {products, loading, error} =useSelector((state)=> state.product)
+  const {products, loading, error} = useSelector((state)=> state.product)
   const dispatch = useDispatch()
   // Bu değişkenler, state yönetimi olmadan, sadece UI gösterimi için
   const searchQuery = '';
@@ -27,12 +28,11 @@ export default function ProductsScreen() {
     setCartItems([...cartItems, product])
   }
 
- console.log(loading);
- console.log(error);
- 
-
   useEffect(()=>{
-   dispatch(fetchProducts())
+   // API çağrısını bir miktar geciktirerek loading durumunu görelim
+   setTimeout(() => {
+     dispatch(fetchProducts())
+   }, 2000);
   }, [dispatch])
   
 
@@ -67,19 +67,34 @@ export default function ProductsScreen() {
         </TouchableOpacity>
       </View>
       
-      {/* Ürün Listesi */}
-      <FlatList
-        data={products.filter(item => item.id)}
-        keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
-        renderItem={({ item }) => (
-          <View style={styles.productItem}>
-            <ProductCard {...item} addToCart={addToCart} />
-          </View>
-        )}
-        numColumns={1}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.productList}
-      />
+      {/* Ürün Listesi - Loading durumunda skeleton göster */}
+      {loading ? (
+        <FlatList
+          data={Array(6).fill({})} // 6 skeleton item oluştur
+          keyExtractor={(_, index) => `skeleton-${index}`}
+          renderItem={() => (
+            <View style={styles.productItem}>
+              <ProductSkeleton />
+            </View>
+          )}
+          numColumns={1}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.productList}
+        />
+      ) : (
+        <FlatList
+          data={products.filter(item => item.id)}
+          keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
+          renderItem={({ item }) => (
+            <View style={styles.productItem}>
+              <ProductCard {...item} addToCart={addToCart} />
+            </View>
+          )}
+          numColumns={1}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.productList}
+        />
+      )}
     </SafeAreaView>
   );
 }
