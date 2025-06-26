@@ -2,36 +2,52 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import MyButton from '@/components/MyButton';
 import Button from '@/components/Button';
 import Counter from '@/components/Counter';
+import MyElement from '@/components/MyElement';
 import ProductCard from '@/components/ProductCard';
 import { productsData } from '@/constants/data';
+import { useState } from 'react';
 
 export default function HomeScreen() {
+  const [toggleParagraph, setToggleParagraph] = useState(false);
   // Öne çıkan ürünler - statik veri
   const featuredProducts = productsData.slice(0, 3);
-  
+
   // Kategoriler - statik veri
   const categories = [
     { name: 'Elektronik', icon: 'phone-portrait-outline' },
     { name: 'Giyim', icon: 'shirt-outline' },
     { name: 'Takı', icon: 'diamond-outline' },
-    { name: 'Mutfak', icon: 'restaurant-outline' }
+    { name: 'Mutfak', icon: 'restaurant-outline' },
   ];
+
+  function handleToggleParagraph() {
+    setToggleParagraph(!toggleParagraph);
+  }
+
+  console.log('HomeScreen re-rendered!');
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Counter />
+        <MyElement show={false} />
+        <MyButton onPress={handleToggleParagraph} />
+
         {/* Banner Bölümü */}
         <View style={styles.banner}>
-          <Image 
-            source={{ uri: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg' }} 
-            style={styles.bannerImage} 
+          <Image
+            source={{
+              uri: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
+            }}
+            style={styles.bannerImage}
           />
           <View style={styles.bannerContent}>
             <Text style={styles.bannerTitle}>Yaz İndirimleri</Text>
-            <Text style={styles.bannerText}>Tüm ürünlerde %30'a varan indirimler</Text>
+            <Text style={styles.bannerText}>
+              Tüm ürünlerde %30'a varan indirimler
+            </Text>
             <Button title="Keşfet" onPress={() => {}} variant="primary" />
           </View>
         </View>
@@ -151,5 +167,5 @@ const styles = StyleSheet.create({
   viewAllContainer: {
     alignItems: 'center',
     marginTop: 16,
-  }
+  },
 });

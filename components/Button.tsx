@@ -26,6 +26,9 @@ const Button: React.FC<ButtonProps> = ({
   const primaryColor = '#2f95dc';
   const secondaryColor = '#6b7280';
 
+
+  
+
   const getButtonStyle = () => {
     switch (variant) {
       case 'primary':
